@@ -318,7 +318,7 @@
       Disable formatting for specific regions of code by wrapping them in
       @code("// format: OFF") blocks:
 
-      @example(org.scalafmt.util.FileOps.readFile("readme/matrix.example"))
+      @example(org.scalafmt.util.FileOps.readFile("readme/Matrix.example"))
 
       To disable formatting for a whole file, put the first comment
       at the top of the file.
@@ -337,35 +337,48 @@
 
   @sect{Configuration}
 
-    @p
-      There are two ways to configure @code("scalafmt").
+    @sect{Formatting options}
+      @p
+        There are two ways to configure @code("scalafmt").
 
-      @ol
-        @li
-          As Scala code via the @code("ScalafmtConfig") case class.
-          This is handy when using scalafmt as a standalone library.
-          For details, refer to the Scaladoc.
-        @li
-          (experimental) In a plain text file, options are defined as CLI flags.
-          I recommend you create a file named @code(".scalafmt") and keep it in
-          the root directory of your project.
+        @ol
+          @li
+            As Scala code via the @code("ScalafmtConfig") case class.
+            This is handy when using scalafmt as a standalone library.
+            For details, refer to the Scaladoc.
+          @li
+            (experimental) In a plain text file, options are defined as CLI flags.
+            I recommend you create a file named @code(".scalafmt") and keep it in
+            the root directory of your project.
 
-          @p
-            Here is an example @code(".scalafmt").
+            @p
+              Here is an example @code(".scalafmt").
 
-            @cliFlags
-              # Example .scalafmt, comments are supported.
-              --style defaultWithAlign # For pretty alignment.
-              --maxColumn 100 # For my wide 30" display.
+              @cliFlags
+                # Example .scalafmt, comments are supported.
+                --style defaultWithAlign # For pretty alignment.
+                --maxColumn 100 # For my wide 30" display.
 
-            To experiment with different options, I recommend you use the CLI.
-            For details, read about the @code("--config") flag in the
-            @code("--help") page of the CLI.
+              To experiment with different options, I recommend you use the CLI.
+              For details, read about the @code("--config") flag in the
+              @code("--help") page of the CLI.
 
-          @p
-            Consult the section on your
+          @note. Configuration options for scalafmt are still very few.
 
-      @note. Configuration options for scalafmt are still very few.
+    @sect{SBT: automagic formatting}
+      @p
+        Scalafmt can be triggered by SBT upon full or incremental source compilation.
+        To enable, include the following settings to your project:
+        @ul
+          @li
+            for @code("Compile") and @code("Test") configurations:
+            @code("settings(reformatOnCompileSettings)")
+          @li
+            for @code("IntegrationTest"):
+            @code("settings(reformatOnCompileWithItSettings)")
+       @p
+         If you only want to enable scalafmt for @code("IntegrationTest"), use @code("settings(scalafmtWithItSettings)").
+         It is also enabled by @code("reformatOnCompileWithItSettings").
 
   @sect{FAQ / Troubleshooting}
 

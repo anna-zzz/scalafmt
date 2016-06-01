@@ -51,6 +51,11 @@ object ScalaFmtPlugin extends AutoPlugin {
       noConfigScalafmtSettings ++ inConfig(Compile)(configScalafmtSettings) ++ inConfig(
           Test)(configScalafmtSettings)
 
+    private lazy val scalaFmtItSettings = inConfig(It)(configScalafmtSettings)
+
+    lazy val scalafmtWithItSettings: Seq[Setting[_]] =
+      scalafmtSettings ++ scalaFmtItSettings
+
     lazy val reformatOnCompileSettings: Seq[Def.Setting[_]] = List(
         compileInputs in (Compile, compile) <<=
           (compileInputs in (Compile, compile)) dependsOn (scalafmt in Compile),
@@ -63,12 +68,12 @@ object ScalaFmtPlugin extends AutoPlugin {
           compileInputs in (It, compile) <<=
             (compileInputs in (It, compile)) dependsOn
           (scalafmt in It)
-      )
+      ) ++ scalaFmtItSettings
   }
+
   import autoImport._
 
-  override val projectSettings =
-    scalafmtSettings //  ++ inConfig(Compile)( autoImport.scalafmtSettings) ++ inConfig(Test)( autoImport.scalafmtSettings)
+  override val projectSettings = scalafmtSettings
 
   override def trigger = allRequirements
 
